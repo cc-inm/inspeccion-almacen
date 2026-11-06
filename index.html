@@ -3,419 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Inspección Diaria de Almacén</title>
-
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:linear-gradient(135deg,#e9f3ff,#f4f7fa);
-    min-height:100vh;
-    padding:15px;
-}
-
-.container{
-    width:100%;
-    max-width:900px;
-    margin:auto;
-    background:#fff;
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
-    position:relative;
-    overflow:hidden;
-}
-
-.container::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:url("logo.png") center center no-repeat;
-    background-size:280px;
-    opacity:.04;
-    pointer-events:none;
-}
-
-.header,
-form{
-    position:relative;
-    z-index:2;
-}
-
-.logo{
-    width:120px;
-    display:block;
-    margin:auto;
-    margin-bottom:10px;
-}
-
-.header{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.header h1{
-    color:#0b4f6c;
-    font-size:1.5rem;
-}
-
-.header p{
-    color:#666;
-    margin-top:5px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:15px;
-}
-
-.form-group{
-    margin-bottom:15px;
-}
-
-label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:600;
-    color:#333;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #d5dce3;
-    border-radius:10px;
-    font-size:16px;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-    outline:none;
-    border-color:#0b4f6c;
-    box-shadow:0 0 0 3px rgba(11,79,108,.15);
-}
-
-textarea{
-    min-height:120px;
-    resize:vertical;
-}
-
-.readonly{
-    background:#f2f2f2;
-    font-weight:600;
-}
-
-#preview{
-    margin-top:15px;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-}
-
-#preview img{
-    width:100%;
-    height:130px;
-    object-fit:cover;
-    border-radius:10px;
-    border:1px solid #ccc;
-}
-
-button{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:12px;
-    background:#25D366;
-    color:#fff;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1ebd59;
-}
-
-@media(min-width:768px){
-
-    .grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    #preview{
-        grid-template-columns:repeat(4,1fr);
-    }
-
-    .container{
-        padding:30px;
-    }
-
-    .logo{
-        width:140px;
-    }
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:linear-gradient(135deg,#e9f3ff,#f4f7fa);min-height:100vh;padding:15px}
+.container{width:100%;max-width:900px;margin:auto;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.12);position:relative;overflow:hidden}
+.container::before{content:"";position:absolute;inset:0;background:url("logo.png") center center no-repeat;background-size:280px;opacity:.04;pointer-events:none}
+.header,form{position:relative;z-index:2}
+.logo{width:120px;display:block;margin:0 auto 10px}
+.header{text-align:center;margin-bottom:20px}
+.header h1{color:#0b4f6c;font-size:1.5rem}
+.header p{color:#666;margin-top:5px}
+.grid{display:grid;grid-template-columns:1fr;gap:15px}
+.form-group{margin-bottom:15px}
+label{display:block;margin-bottom:6px;font-weight:600;color:#333}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d5dce3;border-radius:10px;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0b4f6c;box-shadow:0 0 0 3px rgba(11,79,108,.15)}
+textarea{min-height:120px;resize:vertical}
+.readonly{background:#f2f2f2;font-weight:600}
+#preview{margin-top:15px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#preview img{width:100%;height:130px;object-fit:cover;border-radius:10px;border:1px solid #ccc}
+.actions{display:grid;gap:10px}
+button{width:100%;padding:16px;border:none;border-radius:12px;background:#25D366;color:#fff;font-size:17px;font-weight:bold;cursor:pointer}
+button:hover{background:#1ebd59}
+#abrirForms{background:#0b4f6c}
+#abrirForms:hover{background:#083d53}
+.note{font-size:.9rem;color:#555;margin:0 0 12px;line-height:1.4}
+@media(min-width:768px){.grid{grid-template-columns:1fr 1fr}#preview{grid-template-columns:repeat(4,1fr)}.container{padding:30px}.logo{width:140px}}
 </style>
 </head>
-
 <body>
-
 <div class="container">
+  <div class="header">
+    <img src="logo.png" alt="Moravia Salud Animal" class="logo">
+    <h1>📋 Inspección Diaria de Almacén</h1>
+    <p>Moravia Salud Animal<br>Control de Recepción y Almacenamiento</p>
+  </div>
 
-<div class="header">
-
-<img src="logo.png"
-     alt="Moravia Salud Animal"
-     class="logo">
-
-<h1>📋 Inspección Diaria de Almacén</h1>
-
-<p>
-Moravia Salud Animal<br>
-Control de Recepción y Almacenamiento
-</p>
-
+  <form id="inspeccionForm">
+    <div class="grid">
+      <div class="form-group"><label for="dia">Día</label><input type="date" id="dia" required></div>
+      <div class="form-group"><label for="hora">Hora</label><input type="time" id="hora" required></div>
+    </div>
+    <div class="grid">
+      <div class="form-group">
+        <label for="area">Área</label>
+        <select id="area" required><option value="71">71</option><option value="71A">71A</option></select>
+      </div>
+      <div class="form-group">
+        <label for="proveedor">Proveedor</label>
+        <select id="proveedor" required>
+          <option value="ALCAMES">ALCAMES</option><option value="AVIMEX">AVIMEX</option><option value="CALOX">CALOX</option>
+          <option value="CENTRAL VETERINARIA">CENTRAL VETERINARIA</option><option value="CEETAL">CEETAL</option><option value="LHAURA">LHAURA</option>
+          <option value="MEFORSAN">MEFORSAN</option><option value="OTRO">OTRO</option><option value="PURINA">PURINA</option><option value="ZOETIS">ZOETIS</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="gestor">Gestor de Calidad</label>
+      <input type="text" id="gestor" value="Pricila Sanchez" readonly class="readonly">
+    </div>
+    <div class="form-group">
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" placeholder="Ingrese observaciones de la inspección"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="evidencias">📸 Evidencias Fotográficas</label>
+      <input type="file" id="evidencias" accept="image/*" multiple>
+      <div id="preview"></div>
+    </div>
+    <p class="note">WhatsApp abrirá el mensaje listo para enviar; debes tocar Enviar en WhatsApp. Las fotos no se adjuntan automáticamente: selecciónalas en el chat. El formulario de Microsoft se abre por separado y debe completarse allí.</p>
+    <div class="actions">
+      <button type="submit">📲 Preparar reporte para WhatsApp</button>
+      <button type="button" id="abrirForms">📝 Abrir Microsoft Forms</button>
+    </div>
+  </form>
 </div>
-
-<form id="inspeccionForm">
-
-<div class="grid">
-
-<div class="form-group">
-<label>Día</label>
-<input type="date" id="dia" required>
-</div>
-
-<div class="form-group">
-<label>Hora</label>
-<input type="time" id="hora" required>
-</div>
-
-</div>
-
-<div class="grid">
-
-<div class="form-group">
-<label>Área</label>
-
-<select id="area" required>
-<option value="71">71</option>
-<option value="71A">71A</option>
-</select>
-
-</div>
-
-<div class="form-group">
-<label>Proveedor</label>
-
-<select id="proveedor" required>
-<option value="ALCAMES">ALCAMES</option>
-<option value="AVIMEX">AVIMEX</option>
-<option value="CALOX">CALOX</option>
-<option value="CENTRAL VETERINARIA">CENTRAL VETERINARIA</option>
-<option value="CEETAL">CEETAL</option>
-<option value="LHAURA">LHAURA</option>
-<option value="MEFORSAN">MEFORSAN</option>
-<option value="OTRO">OTRO</option>
-<option value="PURINA">PURINA</option>
-<option value="ZOETIS">ZOETIS</option>
-</select>
-
-</div>
-
-</div>
-
-<div class="form-group">
-
-<label>Gestor de Calidad</label>
-
-<input
-type="text"
-id="gestor"
-value="Pricila Sanchez"
-readonly
-class="readonly">
-
-</div>
-
-<div class="form-group">
-
-<label>Observaciones</label>
-
-<textarea
-id="observaciones"
-placeholder="Ingrese observaciones de la inspección"></textarea>
-
-</div>
-
-<div class="form-group">
-
-<label>📸 Evidencias Fotográficas</label>
-
-<input
-    type="file"
-    id="evidencias"
-    accept="image/*"
-    multiple>
-
-<div id="preview"></div>
-
-</div>
-
-<button type="submit">
-
-📲 Enviar Reporte a WhatsApp
-
-</button>
-
-</form>
-
-</div>
-
 <script>
+const form = document.getElementById("inspeccionForm");
+const evidenciaInput = document.getElementById("evidencias");
+const preview = document.getElementById("preview");
+const formsUrl = "https://forms.cloud.microsoft/r/dVarhrPk0N";
 
-// ===== FECHA Y HORA AUTOMÁTICAS =====
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-    const ahora = new Date();
-
-    document.getElementById("dia").value =
-    ahora.toISOString().split("T")[0];
-
-    document.getElementById("hora").value =
-    String(ahora.getHours()).padStart(2,'0')
-    + ":" +
-    String(ahora.getMinutes()).padStart(2,'0');
-
+// Completa fecha y hora usando la zona horaria local.
+document.addEventListener("DOMContentLoaded", () => {
+  const ahora = new Date();
+  const fechaLocal = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 10);
+  document.getElementById("dia").value = fechaLocal;
+  document.getElementById("hora").value = `${String(ahora.getHours()).padStart(2, "0")}:${String(ahora.getMinutes()).padStart(2, "0")}`;
 });
 
-// ===== PREVIEW DE IMÁGENES =====
-
-const evidenciaInput =
-document.getElementById("evidencias");
-
-const preview =
-document.getElementById("preview");
-
-evidenciaInput.addEventListener("change",()=>{
-
-    preview.innerHTML = "";
-
-    [...evidenciaInput.files].forEach(file=>{
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-
-            const img = document.createElement("img");
-
-            img.src = e.target.result;
-
-            preview.appendChild(img);
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
+evidenciaInput.addEventListener("change", () => {
+  preview.replaceChildren();
+  [...evidenciaInput.files].forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+    const img = document.createElement("img");
+    img.alt = `Vista previa: ${file.name}`;
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
 });
 
-// ===== ENVÍO A WHATSAPP =====
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  if (!form.reportValidity()) return;
 
-document
-.getElementById("inspeccionForm")
-.addEventListener("submit",function(e){
+  const dia = document.getElementById("dia").value;
+  const hora = document.getElementById("hora").value;
+  const area = document.getElementById("area").value;
+  const proveedor = document.getElementById("proveedor").value;
+  const gestor = document.getElementById("gestor").value;
+  const observaciones = document.getElementById("observaciones").value.trim() || "Sin observaciones";
+  const fotos = evidenciaInput.files;
+  const evidenciaTexto = fotos.length ? `${fotos.length} fotografía(s) registrada(s)` : "Sin evidencias";
 
-    e.preventDefault();
-
-    const dia =
-    document.getElementById("dia").value;
-
-    const hora =
-    document.getElementById("hora").value;
-
-    const area =
-    document.getElementById("area").value;
-
-    const proveedor =
-    document.getElementById("proveedor").value;
-
-    const gestor =
-    document.getElementById("gestor").value;
-
-    const observaciones =
-    document.getElementById("observaciones").value
-    || "Sin observaciones";
-
-    const fotos =
-    document.getElementById("evidencias").files;
-
-    const evidenciaTexto =
-    fotos.length > 0
-    ? fotos.length + " fotografía(s) registrada(s)"
-    : "Sin evidencias";
-
-    const mensaje =
-
-`📋 *INSPECCIÓN DIARIA DE ALMACÉN*
-
-📅 *Día:* ${dia}
-
-🕒 *Hora:* ${hora}
-
-🏢 *Área:* ${area}
-
-🚚 *Proveedor:* ${proveedor}
-
-👤 *Gestor de Calidad:* ${gestor}
-
-📝 *Observaciones:*
-${observaciones}
-
-📸 *Evidencias:*
-${evidenciaTexto}
-
-✅ Reporte generado desde Inspección Diaria de Almacén`;
-
-    // CAMBIAR POR TU NÚMERO
-
-    const numeroWhatsApp =
-    "50431810929";
-
-    const url =
-    `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-    
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-    window.open(
-   "https://forms.cloud.microsoft/r/dVarhrPk0N",
-   "_blank"
-);
-    window.open(
-   urlWhatsApp,
-   "_blank"
-);
-
+  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✅ Reporte generado desde Inspección Diaria de Almacén`;
+  const numeroWhatsApp = "50431810929";
+  const whatsappUrl = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+  // Una sola ventana emergente por acción del usuario; varios window.open se bloquean en algunos navegadores.
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 });
 
+document.getElementById("abrirForms").addEventListener("click", () => {
+  window.open(formsUrl, "_blank", "noopener,noreferrer");
+});
 </script>
-
 </body>
 </html>
