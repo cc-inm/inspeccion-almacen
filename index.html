@@ -83,7 +83,7 @@ button:hover{background:#1ebd59}
 const form = document.getElementById("inspeccionForm");
 const evidenciaInput = document.getElementById("evidencias");
 const preview = document.getElementById("preview");
-const formsUrl = "https://forms.cloud.microsoft/r/dVarhrPk0N";
+const formsUrl = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u&r189027410afc40f8b50f6c59d31db417=%222026-11-07%22&red1ccc43ceb344dea72b475b9fec338a=%2271%22&rdf6cd82be2b840deb2ab9a24e6ab9bb9=Pricila%20Sanchez&r226f64d891a74372a9345ff9d90698bc=Sacos%20llenos%20de%20polvo";
 
 // Completa fecha y hora usando la zona horaria local.
 document.addEventListener("DOMContentLoaded", () => {
@@ -118,7 +118,7 @@ form.addEventListener("submit", event => {
   const fotos = evidenciaInput.files;
   const evidenciaTexto = fotos.length ? `${fotos.length} fotografía(s) registrada(s)` : "Sin evidencias";
 
-  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✅ Reporte generado desde Inspección Diaria de Almacén`;
+  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✔️ Reporte generado desde Inspección Diaria de Almacén`;
   const numeroWhatsApp = "50431810929";
   const whatsappUrl = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
   // Una sola ventana emergente por acción del usuario; varios window.open se bloquean en algunos navegadores.
