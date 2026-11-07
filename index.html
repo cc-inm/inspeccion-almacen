@@ -131,13 +131,8 @@ document.getElementById("abrirForms").addEventListener("click", () => {
   const gestor = document.getElementById("gestor").value;
   const observaciones = document.getElementById("observaciones").value || "";
 
-  const formsUrl =
-    "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u" +
-    "&r189027410afc40f8b50f6c59d31db417=" + encodeURIComponent('"' + dia + '"') +
-    "&rf43b01b6c6c9407e91ba547366c4a61e=" + encodeURIComponent(area) +
-    "&r376c4cd0a1d34896b931321f5e64da3b=" + encodeURIComponent(proveedor) +
-    "&rdf6cd82be2ab9a24e6ab9bb9=" + encodeURIComponent(gestor) +
-    "&r226f64d891a74372a9345ff9d90698bc=" + encodeURIComponent(observaciones);
+  const formsBaseUrl =
+"https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u";
 
   window.open(formsUrl, "_blank");
 });
