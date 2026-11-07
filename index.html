@@ -125,16 +125,29 @@ form.addEventListener("submit", event => {
 });
 
 document.getElementById("abrirForms").addEventListener("click", () => {
+
   const dia = document.getElementById("dia").value;
   const area = document.getElementById("area").value;
   const proveedor = document.getElementById("proveedor").value;
   const gestor = document.getElementById("gestor").value;
-  const observaciones = document.getElementById("observaciones").value || "";
+  const observaciones =
+      document.getElementById("observaciones").value.trim();
 
-  const formsBaseUrl =
-"https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u";
+  const formsUrl =
+    "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u" +
+    "&r189027410afc40f8b50f6c59d31db417=" + encodeURIComponent('"' + dia + '"') +
+    "&rf43b01b6c6c9407e91ba547366c4a61e=" + encodeURIComponent(area) +
+    "&r376c4cd0a1d34896b931321f5e64da3b=" + encodeURIComponent(proveedor) +
+    "&radc69d0068e24b60816f3d62e5a83203=" + encodeURIComponent(gestor) +
+    "&r20d0c8a7d0e34daba821647d58cc7902=" + encodeURIComponent(observaciones);
 
-  window.open(formsUrl, "_blank");
+  window.open(
+    formsUrl,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+});
 });
 </script>
 </body>
