@@ -72,7 +72,7 @@ button:hover{background:#1ebd59}
       <input type="file" id="evidencias" accept="image/*" multiple>
       <div id="preview"></div>
     </div>
-    <p class="note">WhatsApp abrirá el mensaje listo para enviar; debes tocar Enviar en WhatsApp. Las fotos no se adjuntan automáticamente: selecciónalas en el chat. El formulario de Microsoft se abre por separado y debe completarse allí.</p>
+    <p class="note">WhatsApp abrirá el mensaje listo para enviar; debes tocar Enviar en WhatsApp. Las fotos no se adjuntan automáticamente: selecciónalas en el chat. Microsoft Forms se abrirá con los datos del reporte.</p>
     <div class="actions">
       <button type="submit">📲 Preparar reporte para WhatsApp</button>
       <button type="button" id="abrirForms">📝 Abrir Microsoft Forms</button>
@@ -83,15 +83,30 @@ button:hover{background:#1ebd59}
 const form = document.getElementById("inspeccionForm");
 const evidenciaInput = document.getElementById("evidencias");
 const preview = document.getElementById("preview");
+const diaInput = document.getElementById("dia");
+const horaInput = document.getElementById("hora");
+const fechaStorageKey = "inspeccion-almacen-dia";
 
-// Completa fecha y hora usando la zona horaria local.
-document.addEventListener("DOMContentLoaded", () => {
+function obtenerFechaLocal() {
   const ahora = new Date();
-  const fechaLocal = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000)
-    .toISOString().slice(0, 10);
-  document.getElementById("dia").value = fechaLocal;
-  document.getElementById("hora").value = `${String(ahora.getHours()).padStart(2, "0")}:${String(ahora.getMinutes()).padStart(2, "0")}`;
-});
+  const año = ahora.getFullYear();
+  const mes = String(ahora.getMonth() + 1).padStart(2, "0");
+  const día = String(ahora.getDate()).padStart(2, "0");
+  return `${año}-${mes}-${día}`;
+}
+
+// Restaura la fecha guardada; solo usa hoy cuando todavía no hay una fecha guardada.
+try {
+  diaInput.value = localStorage.getItem(fechaStorageKey) || obtenerFechaLocal();
+  diaInput.addEventListener("change", () => {
+    localStorage.setItem(fechaStorageKey, diaInput.value);
+  });
+} catch (error) {
+  diaInput.value = obtenerFechaLocal();
+}
+
+const ahora = new Date();
+horaInput.value = `${String(ahora.getHours()).padStart(2, "0")}:${String(ahora.getMinutes()).padStart(2, "0")}`;
 
 evidenciaInput.addEventListener("change", () => {
   preview.replaceChildren();
@@ -108,8 +123,8 @@ form.addEventListener("submit", event => {
   event.preventDefault();
   if (!form.reportValidity()) return;
 
-  const dia = document.getElementById("dia").value;
-  const hora = document.getElementById("hora").value;
+  const dia = diaInput.value;
+  const hora = horaInput.value;
   const area = document.getElementById("area").value;
   const proveedor = document.getElementById("proveedor").value;
   const gestor = document.getElementById("gestor").value;
@@ -117,37 +132,21 @@ form.addEventListener("submit", event => {
   const fotos = evidenciaInput.files;
   const evidenciaTexto = fotos.length ? `${fotos.length} fotografía(s) registrada(s)` : "Sin evidencias";
 
-  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✔️ Reporte generado desde Inspección Diaria de Almacén`;
+  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:* ${observaciones}\n\n📸 *Evidencias:* ${evidenciaTexto}`;
   const numeroWhatsApp = "50431810929";
   const whatsappUrl = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-  // Una sola ventana emergente por acción del usuario; varios window.open se bloquean en algunos navegadores.
-  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  window.location.assign(whatsappUrl);
 });
 
 document.getElementById("abrirForms").addEventListener("click", () => {
-
-  const dia = document.getElementById("dia").value;
-  const area = document.getElementById("area").value;
-  const proveedor = document.getElementById("proveedor").value;
-  const gestor = document.getElementById("gestor").value;
-  const observaciones =
-      document.getElementById("observaciones").value.trim();
-
-  const formsUrl =
-    "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u" +
-    "&r189027410afc40f8b50f6c59d31db417=" + encodeURIComponent('"' + dia + '"') +
-    "&rf43b01b6c6c9407e91ba547366c4a61e=" + encodeURIComponent(area) +
-    "&r376c4cd0a1d34896b931321f5e64da3b=" + encodeURIComponent(proveedor) +
-    "&radc69d0068e24b60816f3d62e5a83203=" + encodeURIComponent(gestor) +
-    "&r20d0c8a7d0e34daba821647d58cc7902=" + encodeURIComponent(observaciones);
-
-  window.open(
-    formsUrl,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
-});
+  const formsUrl = new URL("https://forms.cloud.microsoft/Pages/ResponsePage.aspx");
+  formsUrl.searchParams.set("id", "MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u");
+  formsUrl.searchParams.set("r189027410afc40f8b50f6c59d31db417", diaInput.value);
+  formsUrl.searchParams.set("rf43b01b6c6c9407e91ba547366c4a61e", document.getElementById("area").value);
+  formsUrl.searchParams.set("r376c4cd0a1d34896b931321f5e64da3b", document.getElementById("proveedor").value);
+  formsUrl.searchParams.set("radc69d0068e24b60816f3d62e5a83203", document.getElementById("gestor").value);
+  formsUrl.searchParams.set("r20d0c8a7d0e34daba821647d58cc7902", document.getElementById("observaciones").value.trim());
+  window.location.assign(formsUrl.toString());
 });
 </script>
 </body>
