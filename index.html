@@ -118,10 +118,12 @@ form.addEventListener("submit", event => {
   const evidenciaTexto = fotos.length ? `${fotos.length} fotografía(s) registrada(s)` : "Sin evidencias";
 
   const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✔️ Reporte generado desde Inspección Diaria de Almacén`;
-  const numeroWhatsApp = "50431810929";
-  const whatsappUrl = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-  // Una sola ventana emergente por acción del usuario; varios window.open se bloquean en algunos navegadores.
-  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  const numerosWhatsApp = ["50431810929", "50498620005"];
+  // Algunos navegadores pueden bloquear ventanas emergentes adicionales.
+  numerosWhatsApp.forEach(numero => {
+    const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  });
 });
 
 document.getElementById("abrirForms").addEventListener("click", () => {
