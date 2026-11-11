@@ -72,9 +72,10 @@ button:hover{background:#1ebd59}
       <input type="file" id="evidencias" accept="image/*" multiple>
       <div id="preview"></div>
     </div>
-    <p class="note">WhatsApp abrirá el mensaje listo para enviar; debes tocar Enviar en WhatsApp. Las fotos no se adjuntan automáticamente: selecciónalas en el chat. El formulario de Microsoft se abre por separado y debe completarse allí.</p>
+    <p class="note">WhatsApp abrirá el mensaje listo para enviar; debes tocar Enviar en WhatsApp. Las fotos no se adjuntan automáticamente: selecciónalas en el chat. Microsoft Forms se abrirá con algunos campos precargados.</p>
     <div class="actions">
-      <button type="submit">📲 Preparar reporte para WhatsApp</button>
+      <button type="button" class="whatsappButton" data-numero="50431810929">📲 Enviar reporte a 50431810929</button>
+      <button type="button" class="whatsappButton" data-numero="50498620005">📲 Enviar reporte a 50498620005</button>
       <button type="button" id="abrirForms">📝 Abrir Microsoft Forms</button>
     </div>
   </form>
@@ -104,10 +105,7 @@ evidenciaInput.addEventListener("change", () => {
   });
 });
 
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  if (!form.reportValidity()) return;
-
+function crearMensaje() {
   const dia = document.getElementById("dia").value;
   const hora = document.getElementById("hora").value;
   const area = document.getElementById("area").value;
@@ -117,23 +115,25 @@ form.addEventListener("submit", event => {
   const fotos = evidenciaInput.files;
   const evidenciaTexto = fotos.length ? `${fotos.length} fotografía(s) registrada(s)` : "Sin evidencias";
 
-  const mensaje = `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:*\n${observaciones}\n\n📸 *Evidencias:*\n${evidenciaTexto}\n\n✔️ Reporte generado desde Inspección Diaria de Almacén`;
-  const numerosWhatsApp = ["50431810929", "50498620005"];
-  // Algunos navegadores pueden bloquear ventanas emergentes adicionales.
-  numerosWhatsApp.forEach(numero => {
-    const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+  return `📋 *INSPECCIÓN DIARIA DE ALMACÉN*\n\n📅 *Día:* ${dia}\n\n🕒 *Hora:* ${hora}\n\n🏢 *Área:* ${area}\n\n🚚 *Proveedor:* ${proveedor}\n\n👤 *Gestor de Calidad:* ${gestor}\n\n📝 *Observaciones:* ${observaciones}\n\n📸 *Evidencias:* ${evidenciaTexto}`;
+}
+
+document.querySelectorAll(".whatsappButton").forEach(button => {
+  button.addEventListener("click", () => {
+    if (!form.reportValidity()) return;
+
+    const numero = button.dataset.numero;
+    const whatsappUrl = `https://wa.me/${numero}?text=${encodeURIComponent(crearMensaje())}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   });
 });
 
 document.getElementById("abrirForms").addEventListener("click", () => {
-
   const dia = document.getElementById("dia").value;
   const area = document.getElementById("area").value;
   const proveedor = document.getElementById("proveedor").value;
   const gestor = document.getElementById("gestor").value;
-  const observaciones =
-      document.getElementById("observaciones").value.trim();
+  const observaciones = document.getElementById("observaciones").value.trim();
 
   const formsUrl =
     "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=MfwDqrehqUSxkn9U_QGXE1crhgE707RDrXIihMHUMhFUQVpCRzE1R0gyVEhaU1QzSjZHTjlNTjFOSy4u" +
@@ -143,12 +143,7 @@ document.getElementById("abrirForms").addEventListener("click", () => {
     "&radc69d0068e24b60816f3d62e5a83203=" + encodeURIComponent(gestor) +
     "&r20d0c8a7d0e34daba821647d58cc7902=" + encodeURIComponent(observaciones);
 
-  window.open(
-    formsUrl,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
+  window.open(formsUrl, "_blank", "noopener,noreferrer");
 });
 </script>
 </body>
